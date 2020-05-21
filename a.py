@@ -1,8 +1,8 @@
-import os
+import os,re
 from bs4 import BeautifulSoup
 import urllib.request
 from urllib.request import urlretrieve
-
+import datetime
 
 def urllib_download(remote_url, local_url):
     urlretrieve(remote_url, local_url)  
@@ -96,19 +96,25 @@ for index, tag in enumerate(classify):
   
                 html_doc = urllib.request.urlopen(classify_page_url_child)
                 soup = BeautifulSoup(html_doc, 'html.parser')
-                file_parent_name = soup.find('h1').string.replace('/','')
-                dir = 'd:/meitu/album/img/' + tag['name'] + '/' + file_parent_name
+                file_parent_name = re.sub(r'[\s*]\d*|', '', soup.find('h1').string.replace('/', ''))
+                dir = 'e:/meitu/img/' + tag['name'] + '/' + file_parent_name
+                print(dir)
+                #print('文件夹存在否')
                 if not os.path.exists(dir):
+                    #print('不存在')
                     os.makedirs(dir)
 
+                #print('存在')
                 img = soup.find('center').find_all('img')
                 for img_index, img_item in enumerate(img):
+                    #print('获取到了地址')
                     img_src = img_item.get('src')
                     (file, ext) = os.path.splitext(img_src)
-                    _file = dir + '/' + str(img_index) + ext
-                    if not os.path.exists(_file):
-                        urllib_download(img_src, _file)
-                        print('download successful!!!')
+                    _file = dir + '/' + datetime.datetime.now().strftime("%Y%m%d%H%M%S") + ext
+                    #if not os.path.exists(_file):
+                    #print('ready')
+                    urllib_download(img_src, _file)
+                    print('download successful!!!')
 
         #print(album_page)
 
