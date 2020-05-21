@@ -13,8 +13,8 @@ def urllib_download():
         if id:
             info = r.hgetall(id)
             print(info)
-            #urlretrieve(info['remote_url'], info['local_url'])
-           # print('successful')
+            urlretrieve(info['remote_url'], info['local_url'])
+            print('successful')
         else:
             print('done')
 
@@ -29,8 +29,8 @@ def get_url():
         classify.append(d)
 
     for index, tag in enumerate(classify):
-        if index > 0:
-            break
+        #if index > 0:
+            #break
 
         html_doc = urllib.request.urlopen(tag['url'])
         soup = BeautifulSoup(html_doc, 'html.parser')
@@ -53,8 +53,8 @@ def get_url():
             #print(classify_page_url)
         
         for page_index, page_item in enumerate(all_child_page):
-            if page_index > 2:
-                break
+            #if page_index > 2:
+                #break
 
             html_doc_child = urllib.request.urlopen(page_item['url'])
             soup_child = BeautifulSoup(html_doc_child, 'html.parser')
